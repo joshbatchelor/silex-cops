@@ -26,6 +26,7 @@ class Config
     private $configValues = array(
         // common
         'last_added'              => 10,
+        'user_actions_enable'     => true,
 
         // web
         'theme'                   => 'default',

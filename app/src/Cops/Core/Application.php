@@ -153,6 +153,7 @@ class Application extends BaseApplication
         $this->mount('{database}/{_locale}/search/',      new Front\SearchController($this));
         $this->mount('{database}/{_locale}/inline-edit/', new Front\InlineEditController($this));
         $this->mount('{database}/{_locale}/opds/',        new Front\OpdsController($this));
+        $this->mount('{database}/{_locale}/user-books/',  new Front\UserBooksController($this));
     }
 
     /**
@@ -190,8 +191,13 @@ class Application extends BaseApplication
         };
 
         $this['entity.user'] = function ($c) {
-            $user = new \Cops\Core\Entity\User;
+            $user = new \Cops\Core\Entity\User($c['collection.user-book']);
             return $user->setRepository($c['repository.user']);
+        };
+
+        $this['entity.user-book'] = function ($c) {
+            $userBook = new \Cops\Core\Entity\UserBook();
+            return $userBook->setRepository($c['repository.user-book']);
         };
     }
 
@@ -313,6 +319,10 @@ class Application extends BaseApplication
             return new \Cops\Core\Entity\UserRepository;
         });
 
+        $this['repository.user-book'] = $this->share(function ($c) {
+            return new \Cops\Core\Entity\UserBookRepository($c['config']);
+        });
+
         $this['repository.calibre-util'] = $this->share(function () {
             return new \Cops\Core\Calibre\UtilRepository;
         });
@@ -364,6 +374,14 @@ class Application extends BaseApplication
             $collection = new \Cops\Core\Entity\UserCollection;
             return $collection->setRepositoryClosure(function () use ($c) {
                 return $c['repository.user'];
+            });
+        };
+
+
+        $this['collection.user-book'] = function ($c) {
+            $collection = new \Cops\Core\Entity\UserBookCollection;
+            return $collection->setRepositoryClosure(function () use ($c) {
+                return $c['repository.user-book'];
             });
         };
     }

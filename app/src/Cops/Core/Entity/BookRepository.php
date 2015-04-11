@@ -481,7 +481,7 @@ class BookRepository extends AbstractRepository implements ApplicationAwareInter
     /**
      * Get the base select from QueryBuilder
      *
-     * @return QueryBuilder
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function getBaseSelect()
     {
